@@ -112,6 +112,12 @@ if [[ $DEBUG == true ]] || [[ $1 =~ -t|--tail-log ]]; then
     tail -f $STARTUPDIR/*.log $HOME/.vnc/*$DISPLAY.log
 fi
 
+# start input method
+export GTK_TM_MODULE=ibus
+export QT_TM_MODULE=ibus
+export XMODIFIERS=@im=ibus
+ibus-daemon -drx
+
 if [ -z "$1" ] || [[ $1 =~ -w|--wait ]]; then
     wait $PID_SUB
 else
