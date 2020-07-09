@@ -58,8 +58,6 @@ RUN $INST_SCRIPTS/libnss_wrapper.sh
 ADD ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 
-USER 1000
-
 #For Japanese
 RUN yum install -y ipa-*-fonts
 RUN mkdir -p $HOME/.config/dconf
@@ -67,5 +65,6 @@ COPY ./src/dconf_user $HOME/.config/dconf/user
 RUN rm -f /dockerstartup/vnc_startup.sh
 COPY ./src/common/scripts/vnc_startup.sh /dockerstartup/vnc_startup.sh
 
+USER 1000
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
 CMD ["--wait"]
