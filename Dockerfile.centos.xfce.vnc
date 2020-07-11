@@ -65,6 +65,10 @@ COPY ./src/dconf_user $HOME/.config/dconf/user
 RUN rm -f /dockerstartup/vnc_startup.sh
 COPY ./src/common/scripts/vnc_startup.sh /dockerstartup/vnc_startup.sh
 
+## show clock in panel to update dispay every 1s. (keep tcp connection)
+RUN mkdir -p $HOME/.config/xfce4/xfconf/xfce-perchannel-xml
+COPY ./src/xfce4-panel.xml $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+
 USER 1000
 ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
 CMD ["--wait"]
