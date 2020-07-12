@@ -18,7 +18,7 @@ ENV DISPLAY=:1 \
 EXPOSE $VNC_PORT $NO_VNC_PORT
 
 ### Envrionment config
-ENV HOME=/headless \
+ENV HOME=/root \
     TERM=xterm \
     STARTUPDIR=/dockerstartup \
     INST_SCRIPTS=/headless/install \
@@ -68,18 +68,18 @@ COPY ./src/butterfly.ini /etc/supervisord.d/
 #For Japanese
 RUN yum install -y ipa-*-fonts
 RUN mkdir -p $HOME/.config/dconf
-COPY ./src/dconf_user $HOME/.config/dconf/user
+COPY ./src/common/xfce/dconf_user $HOME/.config/dconf/user
 RUN rm -f /dockerstartup/vnc_startup.sh
 COPY ./src/common/scripts/vnc_startup.sh /dockerstartup/vnc_startup.sh
 
 ## show clock in panel to update dispay every 1s. (keep tcp connection)
 RUN mkdir -p $HOME/.config/xfce4/xfconf/xfce-perchannel-xml
-COPY ./src/xfce4-panel.xml $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+COPY ./src/common/xfce/xfce4-panel.xml $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
 
 COPY ./src/novnc.ini /etc/supervisord.d/
 
 COPY ./src/docker-entrypoint.sh /
-USER 1000
+USER 0
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 #ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
