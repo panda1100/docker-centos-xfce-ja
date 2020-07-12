@@ -73,6 +73,8 @@ COPY ./src/common/supervisor/butterfly.ini /etc/supervisord.d/
 ### Setup Japanese input method
 RUN rm -f /dockerstartup/vnc_startup.sh
 COPY ./src/common/scripts/vnc_startup.sh /dockerstartup/vnc_startup.sh
+RUN mkdir $HOME/.mozilla
+ADD ./src/common/firefox.tar.gz $HOME/.mozilla
 
 ### Install  xfce settings
 ADD ./src/common/xfce/ $HOME/
