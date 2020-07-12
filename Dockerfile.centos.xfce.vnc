@@ -63,7 +63,7 @@ RUN yum install -y python2-pip.noarch python-tornado.x86_64 supervisor && \
     pip install butterfly
 RUN echo -e "## CentOS 7 Web Console ##\n\n" > /etc/motd && \
     sed -i "s/nodaemon=false/nodaemon=true/g" /etc/supervisord.conf
-COPY ./src/butterfly.ini /etc/supervisord.d/
+COPY ./src/common/supervisor/butterfly.ini /etc/supervisord.d/
 
 #For Japanese
 RUN yum install -y ipa-*-fonts
@@ -76,9 +76,9 @@ COPY ./src/common/scripts/vnc_startup.sh /dockerstartup/vnc_startup.sh
 RUN mkdir -p $HOME/.config/xfce4/xfconf/xfce-perchannel-xml
 COPY ./src/common/xfce/xfce4-panel.xml $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
 
-COPY ./src/novnc.ini /etc/supervisord.d/
+COPY ./src/common/supervisor/novnc.ini /etc/supervisord.d/
 
-COPY ./src/docker-entrypoint.sh /
+COPY ./src/common/supervisor/docker-entrypoint.sh /
 USER 0
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
