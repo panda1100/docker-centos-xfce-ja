@@ -85,6 +85,7 @@ COPY ./src/common/supervisor/novnc.ini /etc/supervisord.d/
 ### configure startup
 ADD ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
+RUN echo 'echo -e "\n################################################\nPlease change vnc and user password.\nUse \"vncpasswd\" command to change vnc password.\n################################################\n"' >> $HOME/.bashrc
 
 COPY ./src/common/supervisor/docker-entrypoint.sh /
 USER 0
