@@ -92,7 +92,8 @@ vncserver -kill $DISPLAY &> $STARTUPDIR/vnc_startup.log \
 
 echo -e "start vncserver with param: VNC_COL_DEPTH=$VNC_COL_DEPTH, VNC_RESOLUTION=$VNC_RESOLUTION\n..."
 if [[ $DEBUG == true ]]; then echo "vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION"; fi
-vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION &> $STARTUPDIR/no_vnc_startup.log
+vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry 1280x1024 &> $STARTUPDIR/no_vnc_startup.log
+
 echo -e "start window manager\n..."
 $HOME/wm_startup.sh &> $STARTUPDIR/wm_startup.log
 
@@ -101,6 +102,44 @@ echo -e "\n\n------------------ VNC environment started ------------------"
 echo -e "\nVNCSERVER started on DISPLAY= $DISPLAY \n\t=> connect via VNC viewer with $VNC_IP:$VNC_PORT"
 echo -e "\nnoVNC HTML client started:\n\t=> connect via http://$VNC_IP:$NO_VNC_PORT/?password=...\n"
 
+echo -e "\n------------------ setup resolution ------------------------"
+xrandr
+
+set +e
+## add custom resolution
+## xrandr --newmode args is output of "gtf 1800 800 60"
+##xrandr --newmode 1800x850 125.75  1800 1904 2088 2376  850 853 863 883 -hsync +vsync
+##xrandr --addmode VNC-0 1800x850
+
+xrandr | grep -q "$VNC_RESOLUTION"
+if [ $? = 0 ]; then
+    echo "resolution $VNC_RESOLUTION already exits"
+else
+    echo "$VNC_RESOLUTION" | grep -q "^[0-9]*x[0-9]*$"
+    if [ $? -ne 0 ]; then
+        echo "set resolution 1280x1024"
+        RES="1280x1024"
+    fi
+
+    RES_X=`echo $VNC_RESOLUTION | cut -d "x" -f1`
+    RES_Y=`echo $VNC_RESOLUTION | cut -d "x" -f2`
+    echo "gtf $RES_X $RES_Y 60"
+    GTF=`gtf $RES_X $RES_Y 60 | grep Modeline | cut -d "\"" -f 3`
+
+    echo "xrandr --newmode $VNC_RESOLUTION $GTF"
+    xrandr --newmode $VNC_RESOLUTION $GTF
+    sleep 1
+    echo "xrandr --addmode VNC-0 $VNC_RESOLUTION"
+    xrandr --addmode VNC-0 $VNC_RESOLUTION
+fi
+
+echo -e "\n------------------ change resolution ------------------------"
+if [ ! -f $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/displays.xml ]; then
+    xrandr --output VNC-0 --mode $VNC_RESOLUTION
+    true
+fi
+
+set -e
 
 if [[ $DEBUG == true ]] || [[ $1 =~ -t|--tail-log ]]; then
     echo -e "\n------------------ $HOME/.vnc/*$DISPLAY.log ------------------"
@@ -108,6 +147,7 @@ if [[ $DEBUG == true ]] || [[ $1 =~ -t|--tail-log ]]; then
     tail -f $STARTUPDIR/*.log $HOME/.vnc/*$DISPLAY.log
 fi
 
+echo -e "\n------------------ start ibus-daemon ------------------------"
 # start input method
 export GTK_TM_MODULE=ibus
 export QT_TM_MODULE=ibus

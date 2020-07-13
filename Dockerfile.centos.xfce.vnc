@@ -24,7 +24,7 @@ ENV HOME=/root \
     INST_SCRIPTS=/headless/install \
     NO_VNC_HOME=/headless/noVNC \
     VNC_COL_DEPTH=24 \
-    VNC_RESOLUTION=1280x1024 \
+    VNC_RESOLUTION=1800x850 \
     PASSWORD=password \
     VNC_VIEW_ONLY=false
 WORKDIR $HOME
@@ -61,6 +61,9 @@ RUN $INST_SCRIPTS/chrome.sh
 
 ### Install xfce UI
 RUN $INST_SCRIPTS/xfce_ui.sh
+
+### Install X tool
+RUN yum install -y xorg-x11-server-Xorg
 
 ### Setup supervisor and butterfly
 RUN echo -e "## CentOS 7 Web Console ##\n\n" > /etc/motd && \
