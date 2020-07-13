@@ -59,16 +59,12 @@ RUN yum install -y python2-pip.noarch python-tornado.x86_64 supervisor && \
 RUN yum install -y firefox
 RUN $INST_SCRIPTS/chrome.sh
 
-### configure startup
-ADD ./src/common/scripts $STARTUPDIR
-
 ### Install xfce UI
 RUN $INST_SCRIPTS/xfce_ui.sh
 
 ### Setup supervisor and butterfly
 RUN echo -e "## CentOS 7 Web Console ##\n\n" > /etc/motd && \
     sed -i "s/nodaemon=false/nodaemon=true/g" /etc/supervisord.conf
-COPY ./src/common/supervisor/butterfly.ini /etc/supervisord.d/
 
 ### Setup Japanese input method
 RUN rm -f /dockerstartup/vnc_startup.sh
@@ -79,12 +75,15 @@ ADD ./src/common/firefox.tar.gz $HOME/.mozilla
 ### Install  xfce settings
 ADD ./src/common/xfce/ $HOME/
 
-## show clock in panel to update dispay every 1s. (keep tcp connection)
+### show clock in panel to update dispay every 1s. (keep tcp connection)
 COPY ./src/common/xfce/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
 
+### start novnc and butterfly using supervisor
+COPY ./src/common/supervisor/butterfly.ini /etc/supervisord.d/
 COPY ./src/common/supervisor/novnc.ini /etc/supervisord.d/
 
-### change permissions
+### configure startup
+ADD ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 
 COPY ./src/common/supervisor/docker-entrypoint.sh /
