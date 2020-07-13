@@ -74,7 +74,7 @@ if [ ! -f $PASSWD_PATH ]; then
         #create random pw to prevent access
         echo $(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 20) | vncpasswd -f > $PASSWD_PATH
     fi
-    echo "$VNC_PW" | vncpasswd -f >> $PASSWD_PATH
+    echo "$PASSWORD" | vncpasswd -f >> $PASSWD_PATH
     chmod 600 $PASSWD_PATH
 fi
 
