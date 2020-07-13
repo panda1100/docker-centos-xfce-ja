@@ -68,19 +68,15 @@ echo -e "\n------------------ change VNC password  ------------------"
 mkdir -p "$HOME/.vnc"
 PASSWD_PATH="$HOME/.vnc/passwd"
 
-if [[ -f $PASSWD_PATH ]]; then
-    echo -e "\n---------  purging existing VNC password settings  ---------"
-    rm -f $PASSWD_PATH
+if [ ! -f $PASSWD_PATH ]; then
+    if [[ $VNC_VIEW_ONLY == "true" ]]; then
+        echo "start VNC server in VIEW ONLY mode!"
+        #create random pw to prevent access
+        echo $(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 20) | vncpasswd -f > $PASSWD_PATH
+    fi
+    echo "$VNC_PW" | vncpasswd -f >> $PASSWD_PATH
+    chmod 600 $PASSWD_PATH
 fi
-
-if [[ $VNC_VIEW_ONLY == "true" ]]; then
-    echo "start VNC server in VIEW ONLY mode!"
-    #create random pw to prevent access
-    echo $(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 20) | vncpasswd -f > $PASSWD_PATH
-fi
-echo "$VNC_PW" | vncpasswd -f >> $PASSWD_PATH
-chmod 600 $PASSWD_PATH
-
 
 ## start vncserver and noVNC webclient
 echo -e "\n------------------ start noVNC  ----------------------------"
