@@ -20,8 +20,12 @@ fi
 if [ "$OPTS" = "" ]; then
     OPTS='--keepalive_interval=10 --force_unicode_width=True --uri_root_path=/term/'
 fi
-
 export OPTS
-export BUTTERFLYPORT=${BUTTERFLYPORT:-80}
+
+if [ "$PORT" = "" ]; then
+    PORT=8080
+fi
+export PORT
+sed -i "s/address = .*/address = \":$PORT\"/g" /etc/traefik.toml
 
 exec /usr/bin/supervisord
