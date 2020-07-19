@@ -1,0 +1,131 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: centos-xfce-ja-volume-full
+spec:
+  serviceName: centos-xfce-ja-volume-full
+  selector:
+    matchLabels:
+      app: centos-xfce-ja-volume-full
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: centos-xfce-ja-volume-full
+    spec:
+      initContainers:
+      - name: centos-xfce-init
+        image: tmatsuo/centos-xfce-ja
+        volumeMounts:
+        - name: centos-xfce-ja-volume-full
+          mountPath: /volume
+        command: ["/bin/bash", "-c"]
+        args:
+        - "
+          if [ ! -d /volume/root ]; then
+              echo copying root dir;
+              cp -a -n /root /volume/;
+          else
+              echo skip copying root dir;
+          fi;
+          if [ ! -d /volume/usr ]; then
+              echo copying usr dir;
+              cp -a -n /usr /volume/;
+          else
+              echo skip copying usr dir; fi;
+          if [ ! -d /volume/etc ]; then
+              echo copying etc dir;
+              cp -a -n /etc /volume/;
+          else
+              echo skip copying etc dir;
+          fi;
+          if [ ! -d /volume/var ]; then
+              echo copying var dir;
+              cp -a -n /var /volume/;
+          else
+              echo skip copying var dir;
+          fi;
+          if [ ! -d /volume/run ]; then
+              echo copying run dir;
+              cp -a -n /run /volume/;
+          else
+              echo skip copying run dir;
+          fi;
+          if [ ! -d /volume/home ]; then
+              echo copying home dir;
+              cp -a -n /home /volume/;
+          else
+              echo skip copying home dir;
+          fi;
+          if [ ! -d /volume/opt ]; then
+              echo copying opt dir;
+              cp -a -n /opt /volume/;
+          else
+              echo skip copying opt dir;
+          fi;
+          if [ ! -d /volume/srv ]; then
+              echo copying srv dir;
+              cp -a -n /srv /volume/;
+          else
+              echo skip copying srv dir;
+          fi;
+          if [ ! -d /volume/headless ]; then
+              echo copying headless dir;
+              cp -a -n /headless /volume/;
+          else
+              echo skip copying headless dir;
+          fi;
+          "
+      containers:
+      - name: centos-xfce-ja-volume-full
+        image: tmatsuo/centos-xfce-ja
+        readinessProbe:
+          httpGet:
+            path: /term/
+            port: 8080
+          httpGet:
+            path: /desktop/
+            port: 8080
+        env:
+        - name: PASSWORD
+          value: password
+        - name: PORT
+          value: "8080"
+        - name: VNC_RESOLUTION
+          value: "1800x850"
+        volumeMounts:
+        - name: centos-xfce-ja-volume-full
+          mountPath: "/volume"
+        - name: centos-xfce-ja-volume-full
+          subPath: "root"
+          mountPath: "/root"
+        - name: centos-xfce-ja-volume-full
+          subPath: "usr"
+          mountPath: "/usr"
+        - name: centos-xfce-ja-volume-full
+          subPath: "etc"
+          mountPath: "/etc"
+        - name: centos-xfce-ja-volume-full
+          subPath: "var"
+          mountPath: "/var"
+        - name: centos-xfce-ja-volume-full
+          subPath: "run"
+          mountPath: "/run"
+        - name: centos-xfce-ja-volume-full
+          subPath: "home"
+          mountPath: "/home"
+        - name: centos-xfce-ja-volume-full
+          subPath: "opt"
+          mountPath: "/opt"
+        - name: centos-xfce-ja-volume-full
+          subPath: "srv"
+          mountPath: "/srv"
+        - name: centos-xfce-ja-volume-full
+          subPath: "headless"
+          mountPath: "/headless"
+      volumes:
+      - name: centos-xfce-ja-volume-full
+        persistentVolumeClaim:
+          claimName: centos-xfce-ja-volume-full
+

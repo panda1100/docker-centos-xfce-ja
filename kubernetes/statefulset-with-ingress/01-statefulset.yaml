@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: centos-xfce-ja
+spec:
+  serviceName: centos-xfce-ja
+  selector:
+    matchLabels:
+      app: centos-xfce-ja
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: centos-xfce-ja
+    spec:
+      containers:
+      - name: centos-xfce-ja
+        image: tmatsuo/centos-xfce-ja
+        readinessProbe:
+          httpGet:
+            path: /term/
+            port: 8080
+          httpGet:
+            path: /desktop/
+            port: 8080
+        env:
+        - name: PASSWORD
+          value: password
+        - name: PORT
+          value: "8080"
+        - name: VNC_RESOLUTION
+          value: "1800x850"
+

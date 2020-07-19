@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: centos-xfce-ja
+spec:
+  serviceName: centos-xfce-ja
+  selector:
+    matchLabels:
+      app: centos-xfce-ja
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: centos-xfce-ja
+    spec:
+      initContainers:
+      - name: butterfly-init
+        image: tmatsuo/centos-xfce-ja
+        volumeMounts:
+        - name: centos-xfce-ja
+          mountPath: /root-copy
+        command: ["/bin/bash"]
+        args: ["-c", "if [ ! -f /root-copy/.bashrc ]; then cp -a -n /root/. /root-copy/; else echo skip copy root dir; fi"]
+      containers:
+      - name: centos-xfce-ja
+        image: tmatsuo/centos-xfce-ja
+        readinessProbe:
+          httpGet:
+            path: /term/
+            port: 8080
+          httpGet:
+            path: /desktop/
+            port: 8080
+        env:
+        - name: PASSWORD
+          value: password
+        - name: PORT
+          value: "8080"
+        - name: VNC_RESOLUTION
+          value: "1800x850"
+        volumeMounts:
+        - name: centos-xfce-ja
+          mountPath: "/root"
+      volumes:
+      - name: centos-xfce-ja
+        persistentVolumeClaim:
+          claimName: centos-xfce-ja
+

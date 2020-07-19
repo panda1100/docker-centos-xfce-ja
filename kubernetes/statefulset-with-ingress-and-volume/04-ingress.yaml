@@ -1,0 +1,21 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: centos-xfce-ja
+#  annotations:
+#    kubernetes.io/ingress.class: nginx
+spec:
+#  tls:
+#  - hosts:
+#    - xfce.example.com
+#    secretName: my-ingress-tls
+  rules:
+  - host: xfce.example.com
+    http:
+      paths:
+        - path: /
+          backend:
+            serviceName: centos-xfce-ja
+            servicePort: 80
+

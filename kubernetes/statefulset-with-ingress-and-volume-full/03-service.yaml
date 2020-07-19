@@ -1,0 +1,15 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: centos-xfce-ja-volume-full
+spec:
+  selector:
+    app: centos-xfce-ja-volume-full
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8080
+
+
