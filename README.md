@@ -12,15 +12,16 @@ Each Docker image is installed with the following components:
 
 * Browsers:
   * Chromium
+  * Firefox
+  * Edge
   
-![Docker VNC Desktop access via HTML page](.pics/vnc_container_view.png)
+![Docker VNC Desktop access via HTML page](.pics/screen-desktop.png)
 
-## OpenShift / Kubernetes
+![Docker Terminal access via HTML page](.pics/screen-term.png)
 
-It's also possible to run the images in container orchestration platforms like [Kubernetes](https://kubernetes.io) or [OpenShift](https://openshift.io/). For more information how to deploy containers in the cluster, take a look at:
+## Kubernetes
 
-* [Kubernetes usage of "headless" VNC Docker images](./kubernetes/README.md)
-* [OpenShift usage of "headless" VNC Docker images](./openshift/README.md) 
+* [Kubernetes usage](./kubernetes/README.md)
 
 ## Usage
 
