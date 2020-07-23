@@ -2,6 +2,7 @@
 
 This repository contains a collection of Docker images with headless VNC environments and butterfly web console through reverse proxy(traefik).
 This repository is based on [docker-headless-vnc-container](https://github.com/ConSol/docker-headless-vnc-container), but it supports CentOS 7 with xfce only.
+Dockerfile "Dockerfile.centos.xfce.vnc" is only maintained.
 
 Each Docker image is installed with the following components:
 
