@@ -35,7 +35,9 @@ if [[ $1 =~ -h|--help ]]; then
 fi
 
 # should also source $STARTUPDIR/generate_container_user
+set +e
 source $HOME/.bashrc
+set -e
 
 # add `--skip` to startup args, to skip the VNC startup procedure
 if [[ $1 =~ -s|--skip ]]; then
