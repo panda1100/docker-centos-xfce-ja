@@ -102,6 +102,8 @@ RUN echo 'echo -e "\n################################################\nPlease ch
 
 ### replace vnc.html to prevent closing window ###
 COPY ./src/common/novnc/vnc.html $NO_VNC_HOME/vnc.html
+### pach launch.sh to bind localhost. https://github.com/novnc/noVNC/pull/1451
+COPY ./src/common/nginx/launch.sh $NO_VNC_HOME/utils/launch.sh
 
 COPY ./src/common/supervisor/docker-entrypoint.sh /
 USER 0
