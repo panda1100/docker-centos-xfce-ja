@@ -47,8 +47,8 @@ RUN $INST_SCRIPTS/no_vnc.sh
 ### Install startup
 RUN $INST_SCRIPTS/libnss_wrapper.sh
 
-### Install Japanese fonts, supervisor and butterfly, firefox, X tool
-RUN yum install -y ipa-*-fonts python2-pip.noarch python-tornado.x86_64 supervisor firefox xorg-x11-server-Xorg && \
+### Install Japanese fonts, supervisor, nginx and butterfly, firefox, X tool
+RUN yum install -y ipa-*-fonts python2-pip.noarch python-tornado.x86_64 supervisor firefox xorg-x11-server-Xorg nginx && \
     pip install butterfly
 
 ### Install Chrome browser
@@ -57,9 +57,22 @@ RUN $INST_SCRIPTS/chrome.sh
 ### Install xfce UI
 RUN $INST_SCRIPTS/xfce_ui.sh
 
-### Install traefik
-COPY ./src/common/traefik/traefik /usr/local/bin/
-COPY ./src/common/traefik/traefik.toml /etc/
+### Setting Nginx
+COPY ./src/common/nginx/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm /tmp/
+COPY ./src/common/nginx/nginx.conf.tmpl /etc/nginx/
+COPY ./src/common/nginx/pam_nginx /etc/pam.d/nginx
+RUN rpm -ivh /tmp/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm && \
+    rm -f /tmp/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm && \
+    groupadd -g 42 shadow && \
+    chgrp shadow /etc/gshadow && \
+    chgrp shadow /etc/shadow && \
+    chgrp shadow /sbin/unix_chkpwd && \
+    chgrp shadow /usr/bin/chage && \
+    chmod 2755 /sbin/unix_chkpwd && \
+    chmod 2755 /usr/bin/chage && \
+    chmod 640 /etc/shadow && \
+    chmod 640 /etc/gshadow && \
+    gpasswd -a nginx shadow
 
 ### Setup supervisor and butterfly
 RUN echo -e "## CentOS 7 Web Console ##\n\n" > /etc/motd && \
@@ -80,7 +93,7 @@ COPY ./src/common/xfce/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml 
 ### start novnc and butterfly using supervisor
 COPY ./src/common/supervisor/butterfly.ini /etc/supervisord.d/
 COPY ./src/common/supervisor/novnc.ini /etc/supervisord.d/
-COPY ./src/common/supervisor/traefik.ini /etc/supervisord.d/
+COPY ./src/common/supervisor/nginx.ini /etc/supervisord.d/
 
 ### configure startup
 ADD ./src/common/scripts $STARTUPDIR

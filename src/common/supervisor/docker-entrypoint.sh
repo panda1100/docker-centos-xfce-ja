@@ -26,6 +26,11 @@ if [ "$PORT" = "" ]; then
     PORT=8080
 fi
 export PORT
-sed -i "s/address = .*/address = \":$PORT\"/g" /etc/traefik.toml
+
+if [ ! -f /etc/nginx/nginx.conf.org ]; then
+    mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.org
+    sed "s/^#http/     /g" /etc/nginx/nginx.conf.tmpl > /etc/nginx/nginx.conf
+    sed -i "s/8080/$PORT/g" /etc/nginx/nginx.conf
+fi
 
 exec /usr/bin/supervisord
