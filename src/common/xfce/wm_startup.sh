@@ -9,6 +9,9 @@ xset -dpms &
 xset s noblank &
 xset s off &
 
+### disable ssh-agnet
+xfconf-query -c xfce4-session -p /startup/ssh-agent/enabled -n -t bool -s false
+
 /usr/bin/startxfce4 --replace > $HOME/wm.log &
 sleep 1
 cat $HOME/wm.log
