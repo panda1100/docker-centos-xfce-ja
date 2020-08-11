@@ -73,6 +73,10 @@ http {
         location / {
             auth_pam "Secure Zone";
             auth_pam_service_name "nginx";
+
+            satisfy any;
+            allow 127.0.0.1/32;
+            deny all;
         }
 
         location /desktop/ {
@@ -89,6 +93,10 @@ http {
             proxy_cache_bypass $http_upgrade;
             proxy_set_header Host $host;
             proxy_set_header Origin '';
+
+            satisfy any;
+            allow 127.0.0.1/32;
+            deny all;
         }
 
         location /app/ {
@@ -105,6 +113,10 @@ http {
             proxy_cache_bypass $http_upgrade;
             proxy_set_header Host $host;
             proxy_set_header Origin '';
+
+            satisfy any;
+            allow 127.0.0.1/32;
+            deny all;
         }
 
         location /core/ {
@@ -121,6 +133,10 @@ http {
             proxy_cache_bypass $http_upgrade;
             proxy_set_header Host $host;
             proxy_set_header Origin '';
+
+            satisfy any;
+            allow 127.0.0.1/32;
+            deny all;
         }
 
         location /vendor/ {
@@ -137,6 +153,10 @@ http {
             proxy_cache_bypass $http_upgrade;
             proxy_set_header Host $host;
             proxy_set_header Origin '';
+
+            satisfy any;
+            allow 127.0.0.1/32;
+            deny all;
         }
 
         location /websockify {
@@ -153,6 +173,10 @@ http {
             proxy_cache_bypass $http_upgrade;
             proxy_set_header Host $host;
             proxy_set_header Origin '';
+
+            satisfy any;
+            allow 127.0.0.1/32;
+            deny all;
         }
 
         location /term/ {
@@ -169,6 +193,10 @@ http {
             proxy_cache_bypass $http_upgrade;
             proxy_set_header Host $host;
             proxy_set_header Origin '';
+
+            satisfy any;
+            allow 127.0.0.1/32;
+            deny all;
         }
 
         location /file/ {
@@ -182,6 +210,10 @@ http {
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header Host $host;
             proxy_set_header Origin '';
+
+            satisfy any;
+            allow 127.0.0.1/32;
+            deny all;
         }
 
 
