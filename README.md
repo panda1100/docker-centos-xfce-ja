@@ -27,13 +27,21 @@ Each Docker image is installed with the following components:
 
 ## Usage
 
-- Docker (via internal reverse proxy)
+- Docker (ssl)
 
       docker run -d -p 8080:8080 -e PASSWORD=password --name centos-xfce-ja tmatsuo/centos-xfce-ja
 
-Access http://your-host-name:8080/desktop/ to access xfce desktop.
-Access http://your-host-name:8080/term/ to access web console.
-Access http://your-host-name:8080/file/ to access file browser.
+- Docker (ssl with your key and csr)
+
+      docker run -d -p 8080:8080 -e PASSWORD=password -v /path/to/server.key:/etc/pki/nginx/server.key -v /path/to/server.crt:/etc/pki/nginx/server.crt  --name centos-xfce-ja tmatsuo/centos-xfce-ja
+
+- Docker (non ssl)
+
+      docker run -d -p 8080:8080 -e PASSWORD=password -e NOSSL=true --name centos-xfce-ja tmatsuo/centos-xfce-ja
+
+Access http(s)://your-host-name:8080/desktop/ to access xfce desktop.
+Access http(s)://your-host-name:8080/term/ to access web console.
+Access http(s)://your-host-name:8080/file/ to access file browser.
 
 Reverse proxy(Nginx) requires basic auth. You enter "root" user to login.
 You can change root password using passwd command after login.

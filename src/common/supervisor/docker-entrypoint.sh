@@ -29,7 +29,26 @@ export PORT
 
 if [ ! -f /etc/nginx/nginx.conf.org ]; then
     mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.org
-    sed "s/^#http/     /g" /etc/nginx/nginx.conf.tmpl > /etc/nginx/nginx.conf
+    if [ "$NOSSL" = "true" ]; then
+        sed "s/^#http/     /g" /etc/nginx/nginx.conf.tmpl > /etc/nginx/nginx.conf
+    else
+        sed "s/^#ssl/     /g" /etc/nginx/nginx.conf.tmpl > /etc/nginx/nginx.conf
+        if [ ! -f /etc/pki/nginx/server.key ]; then
+            openssl genrsa 2048 > /etc/pki/nginx/server.key
+            openssl req -new -key /etc/pki/nginx/server.key <<EOF > /etc/pki/nginx/server.csr
+JP
+Default Prefecture
+Default City
+Default Company
+Default Section
+localhost
+
+
+
+EOF
+            openssl x509 -days 3650 -req -signkey /etc/pki/nginx/server.key < /etc/pki/nginx/server.csr > /etc/pki/nginx/server.crt
+        fi
+    fi
     sed -i "s/8080/$PORT/g" /etc/nginx/nginx.conf
 fi
 
