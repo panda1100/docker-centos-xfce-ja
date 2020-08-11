@@ -94,7 +94,7 @@ http {
         location /app/ {
             auth_pam "Secure Zone";
             auth_pam_service_name "nginx";
-            proxy_pass    http://127.0.0.1:6901/app/;
+            alias /headless/noVNC/app/;
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
@@ -110,7 +110,7 @@ http {
         location /core/ {
             auth_pam "Secure Zone";
             auth_pam_service_name "nginx";
-            proxy_pass    http://127.0.0.1:6901/core/;
+            alias /headless/noVNC/core/;
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
@@ -126,7 +126,7 @@ http {
         location /vendor/ {
             auth_pam "Secure Zone";
             auth_pam_service_name "nginx";
-            proxy_pass    http://127.0.0.1:6901/vendor/;
+            alias /headless/noVNC/vendor/;
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
