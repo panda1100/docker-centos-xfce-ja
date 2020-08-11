@@ -36,6 +36,8 @@ fi
 
 # should also source $STARTUPDIR/generate_container_user
 set +e
+pkill Xvnc
+pkill -f "python -m websockify"
 source $HOME/.bashrc
 set -e
 
@@ -53,6 +55,8 @@ fi
 
 ## correct forwarding of shutdown signal
 cleanup () {
+    pkill Xvnc
+    pkill -f "python -m websockify"
     kill -s SIGTERM $!
     exit 0
 }
