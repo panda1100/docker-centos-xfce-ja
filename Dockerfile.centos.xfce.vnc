@@ -89,6 +89,10 @@ ADD ./src/common/firefox.tar.gz $HOME/.mozilla
 ### Install  xfce settings
 ADD ./src/common/xfce/ $HOME/
 
+### Install filebrowser
+RUN curl -fsSL https://filebrowser.org/get.sh | bash && \
+    mkdir /var/lib/filebrowser
+
 ### show clock in panel to update dispay every 1s. (keep tcp connection)
 COPY ./src/common/xfce/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
 
@@ -96,6 +100,7 @@ COPY ./src/common/xfce/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml 
 COPY ./src/common/supervisor/butterfly.ini /etc/supervisord.d/
 COPY ./src/common/supervisor/novnc.ini /etc/supervisord.d/
 COPY ./src/common/supervisor/nginx.ini /etc/supervisord.d/
+COPY ./src/common/supervisor/filebrowser.ini /etc/supervisord.d/
 
 ### configure startup
 ADD ./src/common/scripts $STARTUPDIR
