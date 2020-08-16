@@ -7,10 +7,9 @@ Dockerfile "Dockerfile.centos.xfce.vnc" is only maintained.
 Each Docker image is installed with the following components:
 
 * Desktop environment [**Xfce4**](http://www.xfce.org)
-* VNC-Server (default VNC port `5901`)
-* [**noVNC**](https://github.com/novnc/noVNC) - HTML5 VNC client (port `6901`)
-* [**butterfly**](https://github.com/paradoxxxzero/butterfly) - Terminal Emulator on browser (port `57575`)
-* [**butterfly**](https://github.com/filebrowser/filebrowser) - File browser (port `57576`)
+* [**noVNC**](https://github.com/novnc/noVNC) - HTML5 VNC client (Path http(s)://xx.xx.xx.xx/desktop/)
+* [**butterfly**](https://github.com/paradoxxxzero/butterfly) - Terminal Emulator on browser (Path http(s)://xx.xx.xx.xx/term/)
+* [**filebrowser**](https://github.com/filebrowser/filebrowser) - File browser (Path http(s)://xx.xx.xx.xx/file/)
 
 * Browsers:
   * Chromium
@@ -21,11 +20,7 @@ Each Docker image is installed with the following components:
 
 ![Docker Terminal access via HTML page](.pics/screen-term.png)
 
-## Kubernetes
-
-* [Kubernetes usage](./kubernetes/README.md)
-
-## Usage
+## Usage (Docker)
 
 - Docker (ssl)
 
@@ -45,6 +40,10 @@ Access http(s)://your-host-name:8080/file/ to access file browser.
 
 Reverse proxy(Nginx) requires basic auth. You enter "root" user to login.
 You can change root password using passwd command after login.
+
+## Usage (Kubernetes)
+
+* [Kubernetes usage](./kubernetes/README.md)
 
 ### Override VNC environment variables
 
