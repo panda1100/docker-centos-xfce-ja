@@ -140,10 +140,7 @@ else
 fi
 
 echo -e "\n------------------ change resolution ------------------------"
-if [ ! -f $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/displays.xml ]; then
-    xrandr --output VNC-0 --mode $VNC_RESOLUTION
-    true
-fi
+xrandr --output VNC-0 --mode $VNC_RESOLUTION
 
 set -e
 

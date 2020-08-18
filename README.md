@@ -50,6 +50,7 @@ You can change root password using passwd command after login.
 The following VNC environment variables can be overwritten at the `docker run` phase to customize your desktop environment inside the container:
 * `VNC_COL_DEPTH`, default: `24`
 * `VNC_RESOLUTION`, default: `1800x850`
+  * If you would like to change resolution after starting container, define VNC_RESOLUTION (ex VNC_RESOLUTION="1600x600") at ~/.bashrc and restart desktop using `supervisorctl restart vnc`. 
 
 ### Override reverse proxy listen port
 
