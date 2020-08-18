@@ -40,7 +40,7 @@ RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
 RUN $INST_SCRIPTS/tools.sh
 RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
 ENV LANG='ja_JP.utf8' LANGUAGE='ja_JP:ja' LC_ALL='ja_JP.UTF-8'
-RUN yum install -y ibus-kkc
+RUN yum install -y ibus-kkc fcitx fcitx-configtool fcitx-anthy
 
 ### Install xvnc-server & noVNC - HTML5 based VNC viewer
 RUN $INST_SCRIPTS/tigervnc.sh

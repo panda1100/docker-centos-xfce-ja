@@ -155,10 +155,10 @@ fi
 
 echo -e "\n------------------ start ibus-daemon ------------------------"
 # start input method
-export GTK_TM_MODULE=ibus
-export QT_TM_MODULE=ibus
-export XMODIFIERS=@im=ibus
-ibus-daemon -drx
+export GTK_TM_MODULE=fcitx
+export QT_TM_MODULE=fcitx
+export XMODIFIERS=@im=fcitx
+fcitx &
 
 if [ -z "$1" ] || [[ $1 =~ -w|--wait ]]; then
     wait $PID_SUB
