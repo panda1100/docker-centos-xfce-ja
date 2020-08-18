@@ -81,11 +81,11 @@ RUN rpm -ivh /tmp/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm && \
 RUN echo -e "## CentOS 7 Web Console ##\n\n" > /etc/motd && \
     sed -i "s/nodaemon=false/nodaemon=true/g" /etc/supervisord.conf
 
-### Setup Japanese input method
+### Setup Japanese input method and firefox
 RUN rm -f /dockerstartup/vnc_startup.sh
 COPY ./src/common/scripts/vnc_startup.sh /dockerstartup/vnc_startup.sh
 RUN mkdir $HOME/.mozilla
-ADD ./src/common/firefox.tar.gz $HOME/.mozilla
+COPY ./src/common/firefox $HOME/.mozilla/firefox/
 
 ### Install  xfce settings
 ADD ./src/common/xfce/ $HOME/
