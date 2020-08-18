@@ -169,7 +169,7 @@ fi
 
 echo "Starting webserver and WebSockets proxy on port ${IP}${PORT}"
 #${HERE}/websockify --web ${WEB} ${CERT:+--cert ${CERT}} ${IP}${PORT} ${VNC_DEST} &
-${WEBSOCKIFY} ${SSLONLY} --web ${WEB} ${CERT:+--cert ${CERT}} ${KEY:+--key ${KEY}} ${IP}${PORT} ${VNC_DEST} ${RECORD_ARG} &
+${WEBSOCKIFY} ${SSLONLY} --web ${WEB} ${CERT:+--cert ${CERT}} ${KEY:+--key ${KEY}} --heartbeat 10 ${IP}${PORT} ${VNC_DEST} ${RECORD_ARG} &
 
 proxy_pid="$!"
 sleep 1
