@@ -141,8 +141,12 @@ spec:
         - name: centos-xfce-ja-volume-full
           subPath: "headless"
           mountPath: "/headless"
+        - name: shm
+          mountPath: "/dev/shm"
       volumes:
       - name: centos-xfce-ja-volume-full
         persistentVolumeClaim:
           claimName: centos-xfce-ja-volume-full
-
+      - name: shm
+        emptyDir:
+          medium: Memory

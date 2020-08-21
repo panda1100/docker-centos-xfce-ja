@@ -24,15 +24,15 @@ Each Docker image is installed with the following components:
 
 - Docker (ssl)
 
-      docker run -d -p 8080:8080 -e PASSWORD=password --name centos-xfce-ja tmatsuo/centos-xfce-ja
+      docker run -d -p 8080:8080 -e PASSWORD=password --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
 
 - Docker (ssl with your key and csr)
 
-      docker run -d -p 8080:8080 -e PASSWORD=password -v /path/to/server.key:/etc/pki/nginx/server.key -v /path/to/server.crt:/etc/pki/nginx/server.crt  --name centos-xfce-ja tmatsuo/centos-xfce-ja
+      docker run -d -p 8080:8080 -e PASSWORD=password -v /path/to/server.key:/etc/pki/nginx/server.key -v /path/to/server.crt:/etc/pki/nginx/server.crt  --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
 
 - Docker (non ssl)
 
-      docker run -d -p 8080:8080 -e PASSWORD=password -e NOSSL=true --name centos-xfce-ja tmatsuo/centos-xfce-ja
+      docker run -d -p 8080:8080 -e PASSWORD=password -e NOSSL=true --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
 
 Access http(s)://your-host-name:8080/desktop/ to access xfce desktop.
 Access http(s)://your-host-name:8080/term/ to access web console.
