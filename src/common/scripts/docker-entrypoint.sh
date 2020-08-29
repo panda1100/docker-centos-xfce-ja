@@ -36,6 +36,11 @@ if [ ! -f /etc/init-done ]; then
         disable_service /etc/supervisord.d/sshd.ini
     fi
 
+    # change sshd port
+    if [ "$SSH_PORT" != "" ]; then
+        sed -i "s/^#Port 22/Port $SSH_PORT/g" /etc/ssh/sshd_config
+    fi
+
     # initializing nginx
     mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.org
     if [ "$NOSSL" = "true" ]; then
