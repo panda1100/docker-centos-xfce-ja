@@ -113,6 +113,10 @@ COPY ./src/common/novnc/vnc.html $NO_VNC_HOME/vnc.html
 ### pach launch.sh to bind localhost. https://github.com/novnc/noVNC/pull/1451
 COPY ./src/common/nginx/launch.sh $NO_VNC_HOME/utils/launch.sh
 
+RUN yum install -y openssh-server 
+COPY ./src/common/supervisor/sshd.ini /etc/supervisord.d/
+COPY ./src/common/scripts/sshd_startup.sh /dockerstartup/sshd_startup.sh
+
 COPY ./src/common/supervisor/docker-entrypoint.sh /
 USER 0
 ENTRYPOINT ["/docker-entrypoint.sh"]

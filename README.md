@@ -7,7 +7,7 @@ Linuxのデスクトップ環境(xfceを使用)をコンテナで起動でき、
 また、日本語入力変換も使えるようになっています。(Shift + Spaceで日本語入力ON)
 
 デフォルトでSSLが有効になっており、PAMベースのBasic認証がかかっています。
-Linuxデスクトップ以外に、ターミナルエミュレータ、ファイルブラウザアプリも搭載しています。
+Linuxデスクトップ以外に、ターミナルエミュレータ(ブラウザでアクセス可)、sshサーバ、ファイルブラウザアプリも搭載しています。
 使っている主なコンポーネントは以下の通りです。
 
 * [**Xfce4**] (http://www.xfce.org) - Linuxデスクトップマネージャ。
@@ -47,23 +47,23 @@ Linuxデスクトップ
 
 デフォルトでは、オレオレ証明書を使ってサーバが起動します。--shm-size を指定しないと、firefoxやchromeがクラッシュしますのでご注意ください。
 
-      docker run -d -p 8080:8080 -e PASSWORD=password --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
+      docker run -d -p 8080:8080 -p 10022:22 -e PASSWORD=password --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
 
 - Docker (自身で用意した証明を使いたい場合)
 
 自身で用意した証明書を使いたい場合は、/etc/pki/nginx/server.key と /etc/pki/nginx/server.crt にマウントしてください。
 
-      docker run -d -p 8080:8080 -e PASSWORD=password -v /path/to/server.key:/etc/pki/nginx/server.key -v /path/to/server.crt:/etc/pki/nginx/server.crt  --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
+      docker run -d -p 8080:8080 -p 10022:22 -e PASSWORD=password -v /path/to/server.key:/etc/pki/nginx/server.key -v /path/to/server.crt:/etc/pki/nginx/server.crt  --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
 
 - Docker (SSL無効)
 
 NOSSL環境変数にtrueに設定してください。
 
-      docker run -d -p 8080:8080 -e PASSWORD=password -e NOSSL=true --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
+      docker run -d -p 8080:8080 -p 10022:22 -e PASSWORD=password -e NOSSL=true --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
 
 - アクセス方法
 
-SSL有効・無効にかかわらず、デフォルトのポートは8080です。
+SSL有効・無効にかかわらず、Webサーバのデフォルトのポートは8080です。
 
 * デスクトップへのアクセスは http(s)://IP:8080/desktop/ です。
 * ターミナルエミュレータへのアクセスは http(s)://IP:8080/term/ です。
@@ -71,6 +71,9 @@ SSL有効・無効にかかわらず、デフォルトのポートは8080です�
 
 Basic認証、およびターミナルエミュレータのログインユーザは root です。
 パスワードは、コンテナ起動時に指定したパスワードです。ログイン後にpasswdコマンドで変更可能です。
+
+sshサーバはポート22で待ち受けています。
+上記コマンド実行例では、-p 10022:22 オプションを付与しているため、ssh -p 10022 root@localhost でアクセス可能です。
 
 ## 使い方 (Kubernetes)
 
@@ -86,7 +89,7 @@ Basic認証、およびターミナルエミュレータのログインユーザ
   * デスクトップの解像度を指定できます。横解像度x縦解像度 というフォーマットで記載してください。
   * コンテナ起動後に解像度を変更したい場合は、Linuxデスクトップの設定で変更することができますが、コンテナを再起動すると元に戻ります。設定を永続化したい場合は、 /root/.bashrc ファイルに、VNC_RESOLUTION 変数を設定してください。デスクトップ環境だけを色道したい場合は、`supervisorctl restart vnc` コマンドを実行してください。
 
-## 待ち受けポートの変更
+## Webサーバ待ち受けポートの変更
 
 * `PORT`, デフォルト: `8080`
   * コンテナ(Nginxリバースプロキシ)の待ち受けポートを指定できます。
@@ -100,7 +103,7 @@ Basic認証、およびターミナルエミュレータのログインユーザ
 
 ## その他制限
 
-一部ショートカットは使えないことがわかっています。(以下はChrome on Windowsで試した結果)
+Webブラウザでのアクセスは、一部ショートカットが使えないことがわかっています。(以下はChrome on Windowsで試した結果)
 
 * Ctrl + w
    * ブラウザ(タブ)が閉じてしまいます。(閉じる前に警告が出るようにしています)
