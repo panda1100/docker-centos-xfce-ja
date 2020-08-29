@@ -26,7 +26,6 @@ RUN yum install -y epel-release && \
     yum erase -y *power* *screensaver* && \
     rm /etc/xdg/autostart/xfce-polkit* && \
     /bin/dbus-uuidgen > /etc/machine-id && \
-    echo "source $STARTUPDIR/generate_container_user" >> $HOME/.bashrc && \
     echo "###### install butterfly ######" && \
     pip install --upgrade pip && \
     pip install butterfly && \
