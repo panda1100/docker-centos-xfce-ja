@@ -9,6 +9,11 @@ function disable_service {
     sed -i 's/autorestart=true/autorestart=false/g' $1
 }
 
+if [ "$PORT" = "" ]; then
+    PORT=8080
+fi
+export PORT
+
 if [ ! -f /etc/init-done ]; then
     if [ "$PASSWORD" = "" ]; then
         PASSWORD=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1`
@@ -31,22 +36,7 @@ if [ ! -f /etc/init-done ]; then
         disable_service /etc/supervisord.d/sshd.ini
     fi
 
-    touch /etc/init-done
-else
-    echo "skip initializing"
-fi
-
-if [ "$OPTS" = "" ]; then
-    OPTS='--keepalive_interval=10 --force_unicode_width=True --uri_root_path=/term/'
-fi
-export OPTS
-
-if [ "$PORT" = "" ]; then
-    PORT=8080
-fi
-export PORT
-
-if [ ! -f /etc/nginx/nginx.conf.org ]; then
+    # initializing nginx
     mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.org
     if [ "$NOSSL" = "true" ]; then
         sed "s/^#http/     /g" /etc/nginx/nginx.conf.tmpl > /etc/nginx/nginx.conf
@@ -69,6 +59,16 @@ EOF
         fi
     fi
     sed -i "s/8080/$PORT/g" /etc/nginx/nginx.conf
+    # initializing nginx done
+
+    touch /etc/init-done
+else
+    echo "skip initializing"
 fi
+
+if [ "$OPTS" = "" ]; then
+    OPTS='--keepalive_interval=10 --force_unicode_width=True --uri_root_path=/term/'
+fi
+export OPTS
 
 exec /usr/bin/supervisord
