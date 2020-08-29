@@ -1,19 +1,8 @@
 # This Dockerfile is used to build an headles vnc image based on Centos
 
 FROM tmatsuo/centos:7
-ENV REFRESHED_AT 2020-08-11
-
-LABEL io.k8s.description="Web based VNC and Terminal Container with Xfce on CentOS" \
-      io.k8s.display-name="VNC and Terminal on CentOS" \
-      io.openshift.expose-services="8080:http" \
-      io.openshift.tags="vnc, terminal, centos, xfce" \
-      io.openshift.non-scalable=true \
-      maintainer="matsuo.tak@gmail.com"
-
-# Default http port is 8080
-# VNC : http://IP:8080/desktop/
-# Terminal : http://IP:8080/term/
-EXPOSE 8080
+ENV REFRESHED_AT 2020-08-29
+LABEL maintainer="matsuo.tak@gmail.com"
 
 ### Envrionment config
 ENV HOME=/root \
@@ -26,21 +15,37 @@ ENV HOME=/root \
     PASSWORD=password \
     VNC_VIEW_ONLY=false \
     DISPLAY=:1 \
+    LANG='ja_JP.utf8' LANGUAGE='ja_JP:ja' LC_ALL='ja_JP.UTF-8' \
     VNC_PORT=5901
 
 WORKDIR $HOME
 
-### Add all install scripts for further steps
+# yum and pip install
+RUN yum install -y ibus-kkc fcitx fcitx-configtool fcitx-anthy ipa-*-fonts python2-pip.noarch python-tornado.x86_64 supervisor firefox xorg-x11-server-Xorg nginx psmisc openssh-server && \
+    pip install butterfly && \
+    yum clean all
+
+### ADD and COPY files
 ADD ./src/common/install/ $INST_SCRIPTS/
 ADD ./src/centos/install/ $INST_SCRIPTS/
-RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
+ADD ./src/common/xfce/ $HOME/
+ADD ./src/common/scripts $STARTUPDIR
+COPY ./src/common/nginx/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm /tmp/
+COPY ./src/common/nginx/nginx.conf.tmpl /etc/nginx/
+COPY ./src/common/nginx/pam_nginx /etc/pam.d/nginx
+COPY ./src/common/scripts/vnc_startup.sh /dockerstartup/vnc_startup.sh
+COPY ./src/common/firefox $HOME/.mozilla/firefox/
+COPY ./src/common/xfce/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+COPY ./src/common/supervisor/*.ini /etc/supervisord.d/
+COPY ./src/common/scripts/sshd_startup.sh /dockerstartup/sshd_startup.sh
+COPY ./src/common/supervisor/docker-entrypoint.sh /
 
+### Add +x permission
+RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
 
 ### Install some common tools
 RUN $INST_SCRIPTS/tools.sh
 RUN localedef -f UTF-8 -i ja_JP ja_JP.UTF-8
-ENV LANG='ja_JP.utf8' LANGUAGE='ja_JP:ja' LC_ALL='ja_JP.UTF-8'
-RUN yum install -y ibus-kkc fcitx fcitx-configtool fcitx-anthy
 
 ### Install xvnc-server & noVNC - HTML5 based VNC viewer
 RUN $INST_SCRIPTS/tigervnc.sh
@@ -49,10 +54,6 @@ RUN $INST_SCRIPTS/no_vnc.sh
 ### Install startup
 RUN $INST_SCRIPTS/libnss_wrapper.sh
 
-### Install Japanese fonts, supervisor, nginx and butterfly, firefox, X tool, and so on
-RUN yum install -y ipa-*-fonts python2-pip.noarch python-tornado.x86_64 supervisor firefox xorg-x11-server-Xorg nginx psmisc && \
-    pip install butterfly
-
 ### Install Chrome browser
 RUN $INST_SCRIPTS/chrome.sh
 
@@ -60,9 +61,6 @@ RUN $INST_SCRIPTS/chrome.sh
 RUN $INST_SCRIPTS/xfce_ui.sh
 
 ### Setting Nginx
-COPY ./src/common/nginx/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm /tmp/
-COPY ./src/common/nginx/nginx.conf.tmpl /etc/nginx/
-COPY ./src/common/nginx/pam_nginx /etc/pam.d/nginx
 RUN rpm -ivh /tmp/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm && \
     rm -f /tmp/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm && \
     mkdir /etc/pki/nginx/ && \
@@ -81,43 +79,18 @@ RUN rpm -ivh /tmp/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm && \
 RUN echo -e "## CentOS 7 Web Console ##\n\n" > /etc/motd && \
     sed -i "s/nodaemon=false/nodaemon=true/g" /etc/supervisord.conf
 
-### Setup Japanese input method and firefox
-RUN rm -f /dockerstartup/vnc_startup.sh
-COPY ./src/common/scripts/vnc_startup.sh /dockerstartup/vnc_startup.sh
-RUN mkdir $HOME/.mozilla
-COPY ./src/common/firefox $HOME/.mozilla/firefox/
-
-### Install  xfce settings
-ADD ./src/common/xfce/ $HOME/
-
 ### Install filebrowser
 RUN curl -fsSL https://filebrowser.org/get.sh | bash && \
     mkdir /var/lib/filebrowser
 
-### show clock in panel to update dispay every 1s. (keep tcp connection)
-COPY ./src/common/xfce/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
-
-### start novnc and butterfly using supervisor
-COPY ./src/common/supervisor/butterfly.ini /etc/supervisord.d/
-COPY ./src/common/supervisor/novnc.ini /etc/supervisord.d/
-COPY ./src/common/supervisor/nginx.ini /etc/supervisord.d/
-COPY ./src/common/supervisor/filebrowser.ini /etc/supervisord.d/
-
 ### configure startup
-ADD ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 RUN echo 'echo -e "\n################################################\nPlease change root password using passwd command.\n################################################\n"' >> $HOME/.bashrc
 
-### replace vnc.html to prevent closing window ###
+### pach. https://github.com/novnc/noVNC/pull/1451
 COPY ./src/common/novnc/vnc.html $NO_VNC_HOME/vnc.html
-### pach launch.sh to bind localhost. https://github.com/novnc/noVNC/pull/1451
 COPY ./src/common/nginx/launch.sh $NO_VNC_HOME/utils/launch.sh
 
-RUN yum install -y openssh-server 
-COPY ./src/common/supervisor/sshd.ini /etc/supervisord.d/
-COPY ./src/common/scripts/sshd_startup.sh /dockerstartup/sshd_startup.sh
-
-COPY ./src/common/supervisor/docker-entrypoint.sh /
 USER 0
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
