@@ -56,7 +56,7 @@ COPY ./src/common/firefox $HOME/.mozilla/firefox/
 COPY ./src/common/xfce/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
 COPY ./src/common/supervisor/*.ini /etc/supervisord.d/
 COPY ./src/common/scripts/sshd_startup.sh /dockerstartup/sshd_startup.sh
-COPY ./src/common/supervisor/docker-entrypoint.sh /
+COPY ./src/common/scripts/docker-entrypoint.sh /
 
 RUN echo "###### install nginx pam auth module ######" && \
     rpm -ivh /tmp/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm && \
