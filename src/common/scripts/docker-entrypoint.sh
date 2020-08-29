@@ -4,7 +4,12 @@ if [ "$1" != "" ]; then
     exec $@
 fi
 
-if [ ! -f /etc/butterfly-init-done ]; then
+function disable_service {
+    sed -i 's/autostart=true/autostart=false/g' $1
+    sed -i 's/autorestart=true/autorestart=false/g' $1
+}
+
+if [ ! -f /etc/init-done ]; then
     if [ "$PASSWORD" = "" ]; then
         PASSWORD=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1`
         echo "generating root user password : \"$PASSWORD\""
@@ -12,9 +17,23 @@ if [ ! -f /etc/butterfly-init-done ]; then
         echo "please use your specified password"
     fi
     echo "root:${PASSWORD}" | chpasswd
-    touch /etc/butterfly-init-done
+
+    if [ "$DISABLE_DESKTOP" = "true" ]; then
+        disable_service /etc/supervisord.d/novnc.ini
+    fi
+    if [ "$DISABLE_TERMINAL" = "true" ]; then
+        disable_service /etc/supervisord.d/butterfly.ini
+    fi
+    if [ "$DISABLE_FILER" = "true" ]; then
+        disable_service /etc/supervisord.d/filebrowser.ini
+    fi
+    if [ "$DISABLE_SSH" = "true" ]; then
+        disable_service /etc/supervisord.d/sshd.ini
+    fi
+
+    touch /etc/init-done
 else
-    echo "skip generating password"
+    echo "skip initializing"
 fi
 
 if [ "$OPTS" = "" ]; then
