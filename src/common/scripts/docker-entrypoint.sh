@@ -25,6 +25,7 @@ if [ ! -f /etc/init-done ]; then
 
     if [ "$DISABLE_DESKTOP" = "true" ]; then
         disable_service /etc/supervisord.d/novnc.ini
+        disable_service /etc/supervisord.d/xrdp.ini
     fi
     if [ "$DISABLE_TERMINAL" = "true" ]; then
         disable_service /etc/supervisord.d/butterfly.ini
@@ -35,10 +36,18 @@ if [ ! -f /etc/init-done ]; then
     if [ "$DISABLE_SSH" = "true" ]; then
         disable_service /etc/supervisord.d/sshd.ini
     fi
+    if [ "$DISABLE_RDP" = "true" ]; then
+        disable_service /etc/supervisord.d/xrdp.ini
+    fi
 
     # change sshd port
     if [ "$SSH_PORT" != "" ]; then
         sed -i "s/^#Port 22/Port $SSH_PORT/g" /etc/ssh/sshd_config
+    fi
+
+    # change rdp port
+    if [ "$RDP_PORT" != "" ]; then
+        sed -i "s/^port=3389/port=$RDP_PORT/g" /etc/xrdp/xrdp.ini
     fi
 
     # initializing nginx

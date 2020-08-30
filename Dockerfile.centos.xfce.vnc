@@ -19,7 +19,7 @@ WORKDIR $HOME
 # Install packages
 RUN yum install -y epel-release && \
     wget https://dl.bintray.com/tigervnc/stable/tigervnc-el7.repo -O /etc/yum.repos.d/tigervnc.repo && \
-    yum install -y ibus-kkc fcitx fcitx-configtool fcitx-anthy ipa-*-fonts python2-pip.noarch python-tornado.x86_64 supervisor firefox xorg-x11-server-Xorg nginx psmisc openssh-clients openssh-server vim sudo wget which net-tools bzip2 numpy mailcap bash-completion bash-completion-extras tigervnc-server nss_wrapper gettext chromium chromium-libs chromium-libs-media && \
+    yum install -y ibus-kkc fcitx fcitx-configtool fcitx-anthy ipa-*-fonts python2-pip.noarch python-tornado.x86_64 supervisor firefox xorg-x11-server-Xorg nginx psmisc openssh-clients openssh-server vim sudo wget which net-tools bzip2 numpy mailcap bash-completion bash-completion-extras tigervnc-server nss_wrapper gettext chromium chromium-libs chromium-libs-media xrdp && \
     echo "###### install xfce ######" && \
     yum -y -x gnome-keyring --skip-broken groups install "Xfce" && \
     yum -y groups install "Fonts" && \
@@ -56,6 +56,7 @@ COPY ./src/common/xfce/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml 
 COPY ./src/common/supervisor/*.ini /etc/supervisord.d/
 COPY ./src/common/scripts/sshd_startup.sh /dockerstartup/sshd_startup.sh
 COPY ./src/common/scripts/docker-entrypoint.sh /
+COPY ./src/common/xrdp/xrdp.ini /etc/xrdp/
 
 RUN echo "###### install nginx pam auth module ######" && \
     rpm -ivh /tmp/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm && \

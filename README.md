@@ -7,12 +7,13 @@ Linuxのデスクトップ環境(xfceを使用)をコンテナで起動でき、
 また、日本語入力変換も使えるようになっています。(Shift + Spaceで日本語入力ON)
 
 デフォルトでSSLが有効になっており、PAMベースのBasic認証がかかっています。
-Linuxデスクトップ以外に、ターミナルエミュレータ(ブラウザでアクセス可)、sshサーバ、ファイルブラウザアプリも搭載しています。
+Linuxデスクトップ以外に、ターミナルエミュレータ(ブラウザでアクセス可)、sshサーバ、RDPサーバ、ファイルブラウザアプリも搭載しています。
 使っている主なコンポーネントは以下の通りです。
 
 * [**Xfce4**] (http://www.xfce.org) - Linuxデスクトップマネージャ。
 * [**noVNC**](https://github.com/novnc/noVNC) - HTML5 VNCクライアント。上記Linuxデスクトップ(xfce)へのアクセス用です。
    * http(s)://IP:Port/desktop/ というパスでアクセスできます。(IP:Portはコンテナの待ち受けIPとPort)
+* [**xrdp**](https://github.com/neutrinolabs/xrdp) - リモートデスクトップサーバ。VNCと同じ画面にRDPプロトコルを使って接続できます。
 * [**butterfly**](https://github.com/paradoxxxzero/butterfly) - ブラウザ経由で使えるターミナルエミュレータ。
    * http(s)://IP:Port/term/ というパスでアクセスできます。(IP:Portはコンテナの待ち受けIPとPort)
 * [**filebrowser**](https://github.com/filebrowser/filebrowser) - ファイルブラウザ。手元の端末からファイルをアップロード・ダウンロード可能。
@@ -33,7 +34,7 @@ Linuxデスクトップ以外に、ターミナルエミュレータ(ブラウ�
   
 画面例
 
-Linuxデスクトップ
+Webブラウザ上でのLinuxデスクトップ
 
 ![Docker Linuxデスクトップ](.pics/screen-desktop.png)
 
@@ -47,19 +48,19 @@ Linuxデスクトップ
 
 デフォルトでは、オレオレ証明書を使ってサーバが起動します。--shm-size を指定しないと、firefoxやchromeがクラッシュしますのでご注意ください。
 
-      docker run -d -p 8080:8080 -p 10022:22 -e PASSWORD=password --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
+      docker run -d -p 8080:8080 -p 10022:22 -p 13389:3389 -e PASSWORD=password --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
 
 - Docker (自身で用意した証明を使いたい場合)
 
 自身で用意した証明書を使いたい場合は、/etc/pki/nginx/server.key と /etc/pki/nginx/server.crt にマウントしてください。
 
-      docker run -d -p 8080:8080 -p 10022:22 -e PASSWORD=password -v /path/to/server.key:/etc/pki/nginx/server.key -v /path/to/server.crt:/etc/pki/nginx/server.crt  --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
+      docker run -d -p 8080:8080 -p 10022:22 -p 13389:3389 -e PASSWORD=password -v /path/to/server.key:/etc/pki/nginx/server.key -v /path/to/server.crt:/etc/pki/nginx/server.crt  --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
 
 - Docker (SSL無効)
 
 NOSSL環境変数にtrueに設定してください。
 
-      docker run -d -p 8080:8080 -p 10022:22 -e PASSWORD=password -e NOSSL=true --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
+      docker run -d -p 8080:8080 -p 10022:22 -p 13389:3389 -e PASSWORD=password -e NOSSL=true --name centos-xfce-ja --shm-size=2g tmatsuo/centos-xfce-ja
 
 - アクセス方法
 
@@ -74,6 +75,9 @@ Basic認証、およびターミナルエミュレータのログインユーザ
 
 sshサーバはポート22で待ち受けています。
 上記コマンド実行例では、-p 10022:22 オプションを付与しているため、ssh -p 10022 root@localhost でアクセス可能です。
+
+RDPサーバはポート3389で待ち受けています。
+上記コマンド実行例では、-p 13389:22 オプションを付与しているため、リモートデスクトップクライアントから13389ポートにアクセスしてください。
 
 ## 使い方 (Kubernetes)
 
@@ -96,21 +100,26 @@ sshサーバはポート22で待ち受けています。
   * なお、Nginx以外のコンポーネントは全て127.0.0.1でListenしているため、外部からアクセスできません。
 * `SSH_PORT`, デフォルト: `22`
   * SSHサーバの待ち受けポートを指定できます。
+* `RDP_PORT`, デフォルト: `3389`
+  * リモートデスクトップサーバの待ち受けポートを指定できます。
 
 ## その他環境変数
 
 * DISABLE_DESKTOP=true
   * Linuxデスクトップ環境を無効化(自動起動OFF)にします。
+  * 本オプションを指定した場合、RDPも無効化されます。
 * DISABLE_TERMINAL=true
   * ターミナルを無効化(自動起動OFF)にします。
 * DISABLE_FILER=true
   * ファイルブラウザを無効化(自動起動OFF)にします。
 * DISABLE_SSH=true
   * SSHサーバを無効化(自動起動OFF)にします。
+* DISABLE_RDP=true
+  * RDPサーバを無効化(自動起動OFF)にします。
 
 ## コピペについて
 
-* Linuxデスクトップ内は、通常のLinuxデスクトップ環境と同じように、文字列選択でコピー、マウス中クリックでペースト可能です。
+* Webブラウザ上のLinuxデスクトップ内は、通常のLinuxデスクトップ環境と同じように、文字列選択でコピー、マウス中クリックでペースト可能です。
   * Linuxデスクトップとブラウザ実行端末間でのコピペは、VNCのツール(画面左)を使ってください。なお、VNCの制約により日本語はコピペできません。
 * ターミナルエミュレータの文字は、文字列選択後マウス右クリックでコピー可能です。ペーストは Shift + Insert で可能です。
 
