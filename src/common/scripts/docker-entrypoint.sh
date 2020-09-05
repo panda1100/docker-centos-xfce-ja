@@ -75,6 +75,11 @@ EOF
     sed -i "s/8080/$PORT/g" /etc/nginx/nginx.conf
     # initializing nginx done
 
+    echo "VNC_RESOLUTION=$VNC_RESOLUTION" >> $HOME/.bashrc
+    if [ "DOCKER_HOST" != "" ]; then
+        echo "export DOCKER_HOST=$DOCKER_HOST" >> $HOME/.bashrc
+    fi
+
     touch /etc/init-done
 else
     echo "skip initializing"
