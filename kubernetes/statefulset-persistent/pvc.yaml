@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: centos-xfce-ja-volume-full
+  name: centos-xfce-ja
 spec:
   accessModes:
   - ReadWriteOnce

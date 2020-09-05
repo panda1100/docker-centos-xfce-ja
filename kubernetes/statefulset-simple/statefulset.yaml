@@ -15,7 +15,7 @@ spec:
         app: centos-xfce-ja
     spec:
       containers:
-      - name: centos-xfce-ja
+      - name: centos
         image: tmatsuo/centos-xfce-ja
         livenessProbe:
           exec:
@@ -26,7 +26,7 @@ spec:
             - "--insecure"
             - "-o"
             - "/dev/null"
-            - "https://127.0.0.1:8080/desktop/vnc_lite.html"
+            - "http://127.0.0.1:8080/desktop/vnc_lite.html"
             - "&&"
             - curl
             - "-s"
@@ -34,7 +34,7 @@ spec:
             - "--insecure"
             - "-o"
             - "/dev/null"
-            - "https://127.0.0.1:8080/term/static/main.css"
+            - "http://127.0.0.1:8080/term/static/main.css"
           initialDelaySeconds: 10
           failureThreshold: 3
           periodSeconds: 20
@@ -46,6 +46,18 @@ spec:
           value: "8080"
         - name: VNC_RESOLUTION
           value: "1800x850"
+        - name: NOSSL
+          value: "true"
+        - name: DISABLE_DESKTOP
+          value: "false"
+        - name: DISABLE_TERMINAL
+          value: "false"
+        - name: DISABLE_FILER
+          value: "false"
+        - name: DISABLE_SSH
+          value: "false"
+        - name: DISABLE_RDP
+          value: "false"
         volumeMounts:
         - name: shm
           mountPath: "/dev/shm"
