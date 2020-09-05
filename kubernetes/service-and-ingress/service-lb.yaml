@@ -12,5 +12,9 @@ spec:
     protocol: TCP
     port: 80
     targetPort: 8080
-
-
+  - name: ssh
+    port: 22
+    targetPort: 22
+  - name: rdp
+    port: 3389
+    targetPort: 3389
