@@ -14,6 +14,9 @@ spec:
       labels:
         app: centos-xfce-ja
     spec:
+      shareProcessNamespace: true
+      enableServiceLinks: false
+      automountServiceAccountToken: false
       initContainers:
       - name: init
         image: tmatsuo/centos-xfce-ja
@@ -121,6 +124,8 @@ spec:
           value: "false"
         - name: DISABLE_RDP
           value: "false"
+        - name: DOCKER_HOST
+          value: tcp://localhost:2375
         volumeMounts:
         - name: centos-xfce-ja
           mountPath: "/volume"
@@ -153,6 +158,23 @@ spec:
           mountPath: "/headless"
         - name: shm
           mountPath: "/dev/shm"
+      - name: docker
+        image: docker:stable-dind
+        env:
+          - name: DOCKER_TLS_CERTDIR
+            value: ""
+          - name: DOCKER_HOST
+            value: "tcp://127.0.0.1:2375"
+#        resources:
+#          requests:
+#            cpu: 20m
+#            memory: 4096Mi
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: centos-xfce-ja
+          subPath: "docker"
+          mountPath: "/var/lib/docker"
       volumes:
       - name: centos-xfce-ja
         persistentVolumeClaim:
