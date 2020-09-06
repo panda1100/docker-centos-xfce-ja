@@ -160,6 +160,7 @@ spec:
           mountPath: "/dev/shm"
       - name: docker
         image: docker:stable-dind
+        args: ["--insecure-registry", "registry:5000"]
         env:
           - name: DOCKER_TLS_CERTDIR
             value: ""
