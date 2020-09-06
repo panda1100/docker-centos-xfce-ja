@@ -156,6 +156,9 @@ spec:
         - name: centos-xfce-ja
           subPath: "headless"
           mountPath: "/headless"
+        - name: centos-xfce-ja
+          subPath: "share"
+          mountPath: "/share"
         - name: shm
           mountPath: "/dev/shm"
       - name: docker
@@ -176,6 +179,9 @@ spec:
         - name: centos-xfce-ja
           subPath: "docker"
           mountPath: "/var/lib/docker"
+        - name: centos-xfce-ja
+          subPath: "share"
+          mountPath: "/share"
       volumes:
       - name: centos-xfce-ja
         persistentVolumeClaim:
