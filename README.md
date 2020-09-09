@@ -116,6 +116,10 @@ RDPサーバはポート3389で待ち受けています。
   * SSHサーバを無効化(自動起動OFF)にします。
 * DISABLE_RDP=true
   * RDPサーバを無効化(自動起動OFF)にします。
+* DISABLE_SSH_PASSWORD_LOGIN=true
+  * SSHのパスワードログインを無効にします。
+* SSH_KEY="ssh-rsa AAAAB3(以下略)"
+  * SSHログイン用の公開キーを指定します。
 
 ## コピペについて
 

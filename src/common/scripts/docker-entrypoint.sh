@@ -45,6 +45,19 @@ if [ ! -f /etc/init-done ]; then
         sed -i "s/^#Port 22/Port $SSH_PORT/g" /etc/ssh/sshd_config
     fi
 
+    # disable ssh password login
+    if [ "$DISABLE_SSH_PASSWORD_LOGIN" = "true" ]; then
+        sed -i "s/^PasswordAuthentication yes/PasswordAuthentication no/g" /etc/ssh/sshd_config
+    fi
+
+    # insert ssh public key
+    if [ "$SSH_KEY" != "" ]; then
+        mkdir $HOME/.ssh
+        chmod 700 $HOME/.ssh
+        echo $SSH_KEY >> $HOME/.ssh/authorized_keys
+        chmod 600 $HOME/.ssh/authorized_keys
+    fi
+
     # change rdp port
     if [ "$RDP_PORT" != "" ]; then
         sed -i "s/^port=3389/port=$RDP_PORT/g" /etc/xrdp/xrdp.ini
