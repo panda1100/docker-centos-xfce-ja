@@ -14,7 +14,21 @@ if [ "$PORT" = "" ]; then
 fi
 export PORT
 
+# pre hook
+if [ "$PRE_HOOK" != "" ]; then
+    echo "---- pre hook : $PRE_HOOK --------------"
+    source $PRE_HOOK || exit 1
+    echo "----------------------------------------"
+fi
+
 if [ ! -f /etc/init-done ]; then
+    # pre hook (once)
+    if [ "$PRE_HOOK_ONCE" != "" ]; then
+        echo "---- pre hook once : $PRE_HOOK_ONCE ----"
+        source $PRE_HOOK_ONCE || exit 1
+        echo "----------------------------------------"
+    fi
+
     if [ "$PASSWORD" = "" ]; then
         PASSWORD=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1`
         echo "generating root user password : \"$PASSWORD\""
@@ -93,6 +107,13 @@ EOF
         echo "export DOCKER_HOST=$DOCKER_HOST" >> $HOME/.bashrc
     fi
 
+    # post hook (once)
+    if [ "$POST_HOOK_ONCE" != "" ]; then
+        echo "---- post hook once : $POST_HOOK_ONCE ----"
+        source $POST_HOOK_ONCE || exit 1
+        echo "----------------------------------------"
+    fi
+
     touch /etc/init-done
 else
     echo "skip initializing"
@@ -102,5 +123,12 @@ if [ "$OPTS" = "" ]; then
     OPTS='--keepalive_interval=10 --force_unicode_width=True --uri_root_path=/term/'
 fi
 export OPTS
+
+# post hook
+if [ "$POST_HOOK" != "" ]; then
+    echo "---- post hook : $POST_HOOK ------------"
+    source $POST_HOOK || exit 1
+    echo "----------------------------------------"
+fi
 
 exec /usr/bin/supervisord
