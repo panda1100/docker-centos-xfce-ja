@@ -38,6 +38,7 @@ RUN yum install -y epel-release && \
     echo "###### install filebrowser ######" && \
     curl -fsSL https://filebrowser.org/get.sh | bash && \
     mkdir /var/lib/filebrowser && \
+    chown root:root /usr/local/bin/filebrowser && \
     echo "###### set locale ######" && \
     localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 && \
     echo "###### cleanup ######" && \
