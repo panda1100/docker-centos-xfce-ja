@@ -72,9 +72,6 @@ RUN echo "###### install nginx pam auth module ######" && \
     chmod 640 /etc/shadow && \
     chmod 640 /etc/gshadow && \
     gpasswd -a nginx shadow && \
-    echo "###### setup login message ######" && \
-    echo -e "## CentOS 7 Web Console ##\n\n" > /etc/motd && \
-    echo 'echo -e "\n################################################\nPlease change root password using passwd command.\n################################################\n"' >> $HOME/.bashrc && \
     echo "###### setup supervisord ######" && \
     sed -i "s/nodaemon=false/nodaemon=true/g" /etc/supervisord.conf && \
     echo "###### change permissions for $STARTUPDIR and $HOME ######" && \
