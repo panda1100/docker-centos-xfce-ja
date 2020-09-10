@@ -53,6 +53,7 @@ user_pref("browser.safebrowsing.provider.mozilla.lastupdatetime", "1594562175415
 user_pref("browser.safebrowsing.provider.mozilla.nextupdatetime", "1594565775415");
 user_pref("browser.search.region", "JP");
 user_pref("browser.search.suggest.enabled", false);
+user_pref("browser.search.update", false);
 user_pref("browser.search.useDBForOrder", true);
 user_pref("browser.sessionstore.upgradeBackup.latestBuildID", "20200707170725");
 user_pref("browser.slowStartup.averageTime", 0);
@@ -67,6 +68,7 @@ user_pref("browser.urlbar.placeholderName", "Google");
 user_pref("browser.urlbar.suggest.bookmark", false);
 user_pref("browser.urlbar.suggest.history", false);
 user_pref("browser.urlbar.suggest.openpage", false);
+user_pref("datareporting.healthreport.uploadEnabled", false);                                                                                                 |
 user_pref("datareporting.policy.dataSubmissionPolicyAcceptedVersion", 2);
 user_pref("datareporting.policy.dataSubmissionPolicyNotifiedTime", "1594562173619");
 user_pref("devtools.onboarding.telemetry.logged", true);
