@@ -75,6 +75,7 @@ user_pref("devtools.onboarding.telemetry.logged", true);
 user_pref("distribution.iniFile.exists.appversion", "68.10.0");
 user_pref("distribution.iniFile.exists.value", true);
 user_pref("distribution.redhat.bookmarksProcessed", true);
+user_pref("dom.ipc.processCount", 1);                                                                                                                         |
 user_pref("extensions.activeThemeID", "default-theme@mozilla.org");
 user_pref("extensions.blocklist.pingCountVersion", 0);
 user_pref("extensions.databaseSchema", 31);
@@ -92,6 +93,7 @@ user_pref("extensions.webextensions.uuids", "{\"formautofill@mozilla.org\":\"a10
 user_pref("gfx.blacklist.layers.opengl", 4);
 user_pref("gfx.blacklist.layers.opengl.failureid", "FEATURE_FAILURE_SOFTWARE_GL");
 user_pref("intl.locale.requested", "ja");
+user_pref("layers.acceleration.disabled", true);                                                                                                              |
 user_pref("media.gmp.storage.version.observed", 1);
 user_pref("network.cookie.lifetimePolicy", 2);
 user_pref("network.predictor.cleaned-up", true);
