@@ -73,6 +73,8 @@ RUN echo "###### install nginx pam auth module ######" && \
     chmod 640 /etc/shadow && \
     chmod 640 /etc/gshadow && \
     gpasswd -a nginx shadow && \
+    echo "###### update-ca-trust ######" && \
+    update-ca-trust && \
     echo "###### setup supervisord ######" && \
     sed -i "s/nodaemon=false/nodaemon=true/g" /etc/supervisord.conf && \
     echo "###### change permissions for $STARTUPDIR and $HOME ######" && \
