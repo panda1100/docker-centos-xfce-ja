@@ -50,6 +50,7 @@ ADD ./src/common/xfce/ $HOME/
 ADD ./src/common/scripts $STARTUPDIR
 COPY ./src/common/nginx/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm /tmp/
 COPY ./src/common/nginx/nginx.conf.tmpl /etc/nginx/
+COPY ./src/common/nginx/default.d/* /etc/nginx/default.d/
 COPY ./src/common/nginx/pam_nginx /etc/pam.d/nginx
 COPY ./src/common/scripts/vnc_startup.sh /dockerstartup/vnc_startup.sh
 COPY ./src/common/firefox $HOME/.mozilla/firefox/
