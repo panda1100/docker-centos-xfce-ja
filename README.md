@@ -126,7 +126,7 @@ RDPサーバはポート3389で待ち受けています。
   * スクリプトのリターンコードが0以外の場合、処理はそこで中断します。(コンテナ起動に失敗します)
   * PRE_HOOK -> PRE_HOOK_ONCE -> コンテナ初期起動時に1回だけ実行される処理 -> POST_HOOK_ONCE -> POST_HOOK -> コンテナメインプロセス(supervisord) の順番で実行されます。
   * PRE_HOOK_ONCE と POST_HOOK_ONCE はコンテナを初めて起動する時に1回しか実行されません。
-* BUTTERFLY_OPTSOPTS, デフォルト: `--keepalive_interval=10 --force_unicode_width=True --uri_root_path=/term/`
+* BUTTERFLY_OPTS, デフォルト: `--keepalive_interval=10 --force_unicode_width=True --uri_root_path=/term/`
   * ターミナル(Butterfly)のオプションを指定できます。
 
 ## コピペについて

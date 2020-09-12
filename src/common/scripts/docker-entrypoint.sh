@@ -119,10 +119,10 @@ else
     echo "skip initializing"
 fi
 
-if [ "$OPTS" = "" ]; then
-    OPTS='--keepalive_interval=10 --force_unicode_width=True --uri_root_path=/term/'
+if [ "$BUTTERFLY_OPTS" = "" ]; then
+    BUTTERFLY_OPTS='--keepalive_interval=10 --force_unicode_width=True --uri_root_path=/term/'
 fi
-export OPTS
+export BUTTERFLY_OPTS
 
 # post hook
 if [ "$POST_HOOK" != "" ]; then
