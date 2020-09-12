@@ -105,20 +105,20 @@ RDPサーバはポート3389で待ち受けています。
 
 ## その他環境変数
 
-* DISABLE_DESKTOP=true
-  * Linuxデスクトップ環境を無効化(自動起動OFF)にします。
+* DISABLE_DESKTOP, デフォルト: 未指定
+  * trueを設定すると、Linuxデスクトップ環境を無効化(自動起動OFF)にします。
   * 本オプションを指定した場合、RDPも無効化されます。
-* DISABLE_TERMINAL=true
-  * ターミナルを無効化(自動起動OFF)にします。
-* DISABLE_FILER=true
-  * ファイルブラウザを無効化(自動起動OFF)にします。
-* DISABLE_SSH=true
-  * SSHサーバを無効化(自動起動OFF)にします。
-* DISABLE_RDP=true
-  * RDPサーバを無効化(自動起動OFF)にします。
-* DISABLE_SSH_PASSWORD_LOGIN=true
-  * SSHのパスワードログインを無効にします。
-* SSH_KEY="ssh-rsa AAAAB3(以下略)"
+* DISABLE_TERMINAL, デフォルト: 未指定
+  * trueを設定すると、ターミナルを無効化(自動起動OFF)にします。
+* DISABLE_FILER, デフォルト: 未指定
+  * trueを設定すると、ファイルブラウザを無効化(自動起動OFF)にします。
+* DISABLE_SSH, デフォルト: 未指定
+  * trueを設定すると、SSHサーバを無効化(自動起動OFF)にします。
+* DISABLE_RDP, デフォルト: 未指定
+  * trueを設定すると、RDPサーバを無効化(自動起動OFF)にします。
+* DISABLE_SSH_PASSWORD_LOGIN, デフォルト: 未指定
+  * trueを設定すると、SSHのパスワードログインを無効にします。
+* SSH_KEY="ssh-rsa AAAAB3(以下略)", デフォルト: 未指定
   * SSHログイン用の公開キーを指定します。
 * PRE_HOOK PRE_HOOK_ONCE POST_HOOK_ONCE POST_HOOK
   * コンテナ起動時に任意のシェルスクリプトを実行することができます。スクリプトをコンテナにボリュームマウントし、そのマウントパスを環境変数に指定してください。
