@@ -12,7 +12,8 @@ ENV HOME=/root \
     VNC_VIEW_ONLY=false \
     DISPLAY=:1 \
     LANG='ja_JP.utf8' LANGUAGE='ja_JP:ja' LC_ALL='ja_JP.UTF-8' \
-    VNC_PORT=5901
+    VNC_PORT=5901 \
+    CODE_OPTS="--auth none"
 
 WORKDIR $HOME
 
@@ -39,6 +40,14 @@ RUN yum install -y epel-release && \
     curl -fsSL https://filebrowser.org/get.sh | bash && \
     mkdir /var/lib/filebrowser && \
     chown root:root /usr/local/bin/filebrowser && \
+    echo "###### install vscode ######" && \
+    curl -fsSL https://code-server.dev/install.sh | sh && \
+    /usr/bin/code-server --install-extension ms-kubernetes-tools.vscode-kubernetes-tools && \
+    /usr/bin/code-server --install-extension ms-ceintl.vscode-language-pack-ja && \
+    /usr/bin/code-server --install-extension auchenberg.vscode-browser-preview && \
+    /usr/bin/code-server --install-extension ipedrazas.kubernetes-snippets && \
+    echo -e '{\n "terminal.integrated.shell.linux": "/bin/bash",\n "workbench.colorTheme": "Default Dark+"\n }' > $HOME/.local/share/code-server/User/settings.json && \
+    echo -e '{\n "locale": "ja"\n } ' > $HOME/.local/share/code-server/User/argv.json && \
     echo "###### set locale ######" && \
     localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 && \
     echo "###### cleanup ######" && \

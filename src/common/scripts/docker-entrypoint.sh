@@ -53,6 +53,9 @@ if [ ! -f /etc/init-done ]; then
     if [ "$DISABLE_RDP" = "true" ]; then
         disable_service /etc/supervisord.d/xrdp.ini
     fi
+    if [ "$DISABLE_CODE" = "true" ]; then
+        disable_service /etc/supervisord.d/code.ini
+    fi
 
     # change sshd port
     if [ "$SSH_PORT" != "" ]; then

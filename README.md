@@ -18,6 +18,8 @@ Linuxデスクトップ以外に、ターミナルエミュレータ(ブラウ�
    * http(s)://IP:Port/term/ というパスでアクセスできます。(IP:Portはコンテナの待ち受けIPとPort)
 * [**filebrowser**](https://github.com/filebrowser/filebrowser) - ファイルブラウザ。手元の端末からファイルをアップロード・ダウンロード可能。
    * http(s)://IP:Port/file/ というパスでアクセスできます。(IP:Portはコンテナの待ち受けIPとPort)
+* [**Code**](https://github.com/cdr/code-server) - VSCode
+   * http(s)://IP:Port/code/ というパスでアクセスできます。(IP:Portはコンテナの待ち受けIPとPort)
 * [**Nginx**](https://github.com/nginx/nginx) - Webサーバ
    * 上記アプリへのリバースプロキシとして、デフォルトは8080ポートで待ち受けます。
 * [**Supervisord**](http://supervisord.org/) - プロセス制御システム
@@ -116,6 +118,8 @@ RDPサーバはポート3389で待ち受けています。
   * trueを設定すると、SSHサーバを無効化(自動起動OFF)にします。
 * DISABLE_RDP, デフォルト: 未指定
   * trueを設定すると、RDPサーバを無効化(自動起動OFF)にします。
+* DISABLE_CODE, デフォルト: 未指定
+  * trueを設定すると、VSCode (code-server)を無効化(自動起動OFF)にします。
 * DISABLE_SSH_PASSWORD_LOGIN, デフォルト: 未指定
   * trueを設定すると、SSHのパスワードログインを無効にします。
 * SSH_KEY="ssh-rsa AAAAB3(以下略)", デフォルト: 未指定
@@ -128,6 +132,8 @@ RDPサーバはポート3389で待ち受けています。
   * PRE_HOOK_ONCE と POST_HOOK_ONCE はコンテナを初めて起動する時に1回しか実行されません。
 * BUTTERFLY_OPTS, デフォルト: `--keepalive_interval=10 --force_unicode_width=True --uri_root_path=/term/`
   * ターミナル(Butterfly)のオプションを指定できます。
+* CODE_OPTS, デフォルト: `--auth none`
+  * VSCode(code-server)起動時の追加オプションを指定します。(拡張パッケージインストールオプション--install-extensionは指定不可)
 
 ## コピペについて
 
