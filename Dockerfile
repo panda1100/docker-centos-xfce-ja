@@ -46,8 +46,6 @@ RUN yum install -y epel-release && \
     /usr/bin/code-server --install-extension ms-ceintl.vscode-language-pack-ja && \
     /usr/bin/code-server --install-extension auchenberg.vscode-browser-preview && \
     /usr/bin/code-server --install-extension ipedrazas.kubernetes-snippets && \
-    echo -e '{\n "terminal.integrated.shell.linux": "/bin/bash",\n "workbench.colorTheme": "Default Dark+"\n }' > $HOME/.local/share/code-server/User/settings.json && \
-    echo -e '{\n "locale": "ja"\n } ' > $HOME/.local/share/code-server/User/argv.json && \
     echo "###### set locale ######" && \
     localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 && \
     echo "###### cleanup ######" && \
@@ -68,6 +66,9 @@ COPY ./src/common/supervisor/*.ini /etc/supervisord.d/
 COPY ./src/common/scripts/sshd_startup.sh /dockerstartup/sshd_startup.sh
 COPY ./src/common/scripts/docker-entrypoint.sh /
 COPY ./src/common/xrdp/xrdp.ini /etc/xrdp/
+COPY ./src/common/code/settings.json $HOME/.local/share/code-server/User/
+COPY ./src/common/code/argv.json $HOME/.local/share/code-server/User/
+COPY ./src/common/code/keybindings.json $HOME/.local/share/code-server/User/
 
 RUN echo "###### install nginx pam auth module ######" && \
     rpm -ivh /tmp/nginx-module-auth-pam-1.5.2-1.el7.x86_64.rpm && \
