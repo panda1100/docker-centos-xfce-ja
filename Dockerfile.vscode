@@ -12,7 +12,7 @@ WORKDIR $HOME
 
 # Install packages
 RUN yum install -y epel-release && \
-    yum install -y supervisor nginx psmisc openssh-clients vim sudo wget which net-tools bzip2 numpy mailcap bash-completion bash-completion-extras nss_wrapper gettext chromium chromium-libs chromium-libs-media && \
+    yum install -y supervisor nginx psmisc openssh-clients vim sudo wget which net-tools bzip2 numpy mailcap bash-completion bash-completion-extras nss_wrapper gettext chromium chromium-libs chromium-libs-media ipa-*-fonts && \
     echo "###### install vscode ######" && \
     curl -fsSL https://code-server.dev/install.sh | sh && \
     /usr/bin/code-server --install-extension ms-kubernetes-tools.vscode-kubernetes-tools && \
