@@ -41,7 +41,7 @@ RUN yum install -y epel-release && \
     mkdir /var/lib/filebrowser && \
     chown root:root /usr/local/bin/filebrowser && \
     echo "###### install vscode ######" && \
-    curl -fsSL https://code-server.dev/install.sh | sh && \
+    curl -fsSL https://code-server.dev/install.sh | sh -s -- --version 3.6.0 && \
     /usr/bin/code-server --install-extension ms-kubernetes-tools.vscode-kubernetes-tools && \
     /usr/bin/code-server --install-extension ms-ceintl.vscode-language-pack-ja && \
     /usr/bin/code-server --install-extension auchenberg.vscode-browser-preview && \

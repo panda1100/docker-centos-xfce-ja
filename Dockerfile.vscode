@@ -14,7 +14,7 @@ WORKDIR $HOME
 RUN yum install -y epel-release && \
     yum install -y supervisor nginx psmisc openssh-clients vim sudo wget which net-tools bzip2 numpy mailcap bash-completion bash-completion-extras nss_wrapper gettext chromium chromium-libs chromium-libs-media ipa-*-fonts && \
     echo "###### install vscode ######" && \
-    curl -fsSL https://code-server.dev/install.sh | sh && \
+    curl -fsSL https://code-server.dev/install.sh | sh -s -- --version 3.6.0 && \
     /usr/bin/code-server --install-extension ms-kubernetes-tools.vscode-kubernetes-tools && \
     /usr/bin/code-server --install-extension ms-ceintl.vscode-language-pack-ja && \
     /usr/bin/code-server --install-extension auchenberg.vscode-browser-preview && \
