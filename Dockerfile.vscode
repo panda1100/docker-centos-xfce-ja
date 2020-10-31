@@ -19,6 +19,8 @@ RUN yum install -y epel-release && \
     /usr/bin/code-server --install-extension ms-ceintl.vscode-language-pack-ja && \
     /usr/bin/code-server --install-extension auchenberg.vscode-browser-preview && \
     /usr/bin/code-server --install-extension ipedrazas.kubernetes-snippets && \
+    /usr/bin/code-server --install-extension ms-azuretools.vscode-docker && \
+    /usr/bin/code-server --install-extension tomoki1207.pdf && \
     echo "###### set locale ######" && \
     localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 && \
     echo "###### cleanup ######" && \
