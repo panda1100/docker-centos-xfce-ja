@@ -27,9 +27,9 @@ RUN yum install -y epel-release && \
     yum erase -y *power* *screensaver* && \
     rm /etc/xdg/autostart/xfce-polkit* && \
     /bin/dbus-uuidgen > /etc/machine-id && \
-    echo "###### install butterfly ######" && \
-    pip install --upgrade pip && \
-    pip install butterfly && \
+    echo "###### install ttyd ######" && \
+    curl -L -o /usr/local/bin/ttyd https://github.com/t-matsuo/ttyd/releases/download/1.6.1.1/ttyd_linux.x86_64 && \
+    chmod 755 /usr/local/bin/ttyd && \
     echo "###### install vnc ######" && \
     mkdir -p $NO_VNC_HOME/utils/websockify && \
     wget -qO- https://github.com/novnc/noVNC/archive/v1.2.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME && \

@@ -14,7 +14,7 @@ Linuxデスクトップ以外に、ターミナルエミュレータ(ブラウ�
 * [**noVNC**](https://github.com/novnc/noVNC) - HTML5 VNCクライアント。上記Linuxデスクトップ(xfce)へのアクセス用です。
    * http(s)://IP:Port/desktop/ というパスでアクセスできます。(IP:Portはコンテナの待ち受けIPとPort)
 * [**xrdp**](https://github.com/neutrinolabs/xrdp) - リモートデスクトップサーバ。VNCと同じ画面にRDPプロトコルを使って接続できます。
-* [**butterfly**](https://github.com/paradoxxxzero/butterfly) - ブラウザ経由で使えるターミナルエミュレータ。
+* [**ttyd**](https://github.com/tsl0922/ttyd) - コマンドの入出力をブラウザ経由で行えるツール。/bin/bash を起動してコマンドプロンプトを表示しています。
    * http(s)://IP:Port/term/ というパスでアクセスできます。(IP:Portはコンテナの待ち受けIPとPort)
 * [**filebrowser**](https://github.com/filebrowser/filebrowser) - ファイルブラウザ。手元の端末からファイルをアップロード・ダウンロード可能。
    * http(s)://IP:Port/file/ というパスでアクセスできます。(IP:Portはコンテナの待ち受けIPとPort)
@@ -130,8 +130,9 @@ RDPサーバはポート3389で待ち受けています。
   * スクリプトのリターンコードが0以外の場合、処理はそこで中断します。(コンテナ起動に失敗します)
   * PRE_HOOK -> PRE_HOOK_ONCE -> コンテナ初期起動時に1回だけ実行される処理 -> POST_HOOK_ONCE -> POST_HOOK -> コンテナメインプロセス(supervisord) の順番で実行されます。
   * PRE_HOOK_ONCE と POST_HOOK_ONCE はコンテナを初めて起動する時に1回しか実行されません。
-* BUTTERFLY_OPTS, デフォルト: `--keepalive_interval=10 --force_unicode_width=True --uri_root_path=/term/`
-  * ターミナル(Butterfly)のオプションを指定できます。
+* TTYD_OPTS, デフォルト: `-P 30`
+  * ターミナル(ttyd)のオプションを指定できます。
+  * 上記オプションに加え、`-p 57575 -i lo -b /term/ /bin/bash` とうオプションを用いてttydが起動されます。
 * CODE_OPTS, デフォルト: `--auth none`
   * VSCode(code-server)起動時の追加オプションを指定します。(拡張パッケージインストールオプション--install-extensionは指定不可)
 
