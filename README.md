@@ -10,7 +10,7 @@ Linuxのデスクトップ環境(xfceを使用)をコンテナで起動でき、
 Linuxデスクトップ以外に、ターミナルエミュレータ(ブラウザでアクセス可)、sshサーバ、RDPサーバ、ファイルブラウザアプリも搭載しています。
 使っている主なコンポーネントは以下の通りです。
 
-* [**Xfce4**] (http://www.xfce.org) - Linuxデスクトップマネージャ。
+* [**Xfce4**](http://www.xfce.org) - Linuxデスクトップマネージャ。
 * [**noVNC**](https://github.com/novnc/noVNC) - HTML5 VNCクライアント。上記Linuxデスクトップ(xfce)へのアクセス用です。
    * http(s)://IP:Port/desktop/ というパスでアクセスできます。(IP:Portはコンテナの待ち受けIPとPort)
 * [**xrdp**](https://github.com/neutrinolabs/xrdp) - リモートデスクトップサーバ。VNCと同じ画面にRDPプロトコルを使って接続できます。
