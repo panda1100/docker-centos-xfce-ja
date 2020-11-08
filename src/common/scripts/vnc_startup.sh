@@ -87,21 +87,21 @@ mkdir -p "$HOME/.vnc"
 ## start vncserver and noVNC webclient
 echo -e "\n------------------ start noVNC  ----------------------------"
 if [[ $DEBUG == true ]]; then echo "$NO_VNC_HOME/utils/launch.sh --vnc localhost:$VNC_PORT --listen localhost:6901"; fi
-$NO_VNC_HOME/utils/launch.sh --vnc localhost:$VNC_PORT --listen localhost:6901 &> $STARTUPDIR/no_vnc_startup.log &
+$NO_VNC_HOME/utils/launch.sh --vnc localhost:$VNC_PORT --listen localhost:6901 &> $STARTUPDIR/tmp/no_vnc_startup.log &
 PID_SUB=$!
 
 echo -e "\n------------------ start VNC server ------------------------"
 echo "remove old vnc locks to be a reattachable container"
-vncserver -kill $DISPLAY &> $STARTUPDIR/vnc_startup.log \
-    || rm -rfv /tmp/.X*-lock /tmp/.X11-unix &> $STARTUPDIR/vnc_startup.log \
+vncserver -kill $DISPLAY &> $STARTUPDIR/tmp/vnc_startup.log \
+    || rm -rfv /tmp/.X*-lock /tmp/.X11-unix &> $STARTUPDIR/tmp/vnc_startup.log \
     || echo "no locks present"
 
 echo -e "start vncserver with param: VNC_COL_DEPTH=$VNC_COL_DEPTH, VNC_RESOLUTION=$VNC_RESOLUTION\n..."
 if [[ $DEBUG == true ]]; then echo "vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry 1280x1024 -localhost -nolisten tcp -SecurityTypes=None"; fi
-vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry 1280x1024 -localhost -nolisten tcp -SecurityTypes=None &> $STARTUPDIR/no_vnc_startup.log
+vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry 1280x1024 -localhost -nolisten tcp -SecurityTypes=None &> $STARTUPDIR/tmp/no_vnc_startup.log
 
 echo -e "start window manager\n..."
-$STARTUPDIR/wm_startup.sh &> $STARTUPDIR/wm_startup.log
+$STARTUPDIR/wm_startup.sh &> $STARTUPDIR/tmp/wm_startup.log
 
 ## log connect options
 echo -e "\n\n------------------ VNC environment started ------------------"
@@ -147,7 +147,7 @@ set -e
 if [[ $DEBUG == true ]] || [[ $1 =~ -t|--tail-log ]]; then
     echo -e "\n------------------ $HOME/.vnc/*$DISPLAY.log ------------------"
     # if option `-t` or `--tail-log` block the execution and tail the VNC log
-    tail -f $STARTUPDIR/*.log $HOME/.vnc/*$DISPLAY.log
+    tail -f $STARTUPDIR/tmp/*.log $HOME/.vnc/*$DISPLAY.log
 fi
 
 echo -e "\n------------------ start ibus-daemon ------------------------"

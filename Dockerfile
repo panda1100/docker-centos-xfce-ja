@@ -90,13 +90,7 @@ RUN echo "###### install nginx pam auth module ######" && \
     update-ca-trust && \
     echo "###### setup supervisord ######" && \
     sed -i "s/nodaemon=false/nodaemon=true/g" /etc/supervisord.conf && \
-    echo "###### change permissions for $STARTUPDIR and $HOME ######" && \
-    find $STARTUPDIR/ -name '*.sh' -exec chmod $verbose a+x {} + && \
-    find $STARTUPDIR/ -name '*.desktop' -exec chmod $verbose a+x {} + && \
-    chgrp -R 0 $STARTUPDIR && chmod -R $verbose a+rw $STARTUPDIR && find $STARTUPDIR -type d -exec chmod $verbose a+x {} + && \
-    find $HOME/ -name '*.sh' -exec chmod $verbose a+x {} + && \
-    find $HOME/ -name '*.desktop' -exec chmod $verbose a+x {} + && \
-    chgrp -R 0 $HOME && chmod -R $verbose a+rw $HOME && find $HOME -type d -exec chmod $verbose a+x {} +
+    chown root:root $HOME && chmod 750 $HOME && find $HOME -type d -exec chmod 750 {} +
 
 ### Pach. https://github.com/novnc/noVNC/pull/1451
 COPY ./src/common/novnc/vnc.html $NO_VNC_HOME/vnc.html
